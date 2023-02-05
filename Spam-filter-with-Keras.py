@@ -3,17 +3,15 @@
 
 import pandas as pd
 import numpy as np
+
 from keras.models import Model, Sequential
-from keras.layers import LSTM, Dense,Embedding
+from keras.layers import LSTM, Dense, Embedding
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing import sequence
 from keras_preprocessing.sequence import pad_sequences
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.preprocessing import image
-
-from google.colab import files
-uploaded=files.upload()
 
 spam = pd.read_csv("spam.csv", encoding="latin")
 
@@ -32,13 +30,9 @@ mytokenizer = Tokenizer(num_words=max_words,lower=True, split=" ")
 mytokenizer.fit_on_texts(X)
 text_tokenized = mytokenizer.texts_to_sequences(X)
 
-text_tokenized
-
 # Wszystkie sekwencje, krótsze niż 50 znaków, zostaną wypełnione zerami lub innymi znakami w celu osiągnięcia długości 50 znaków.
 max_len = 50
 sequences = pad_sequences(text_tokenized, maxlen=max_len)
-
-sequences
 
 # Tworzenie modelu sieci neuronowej.
 model = Sequential()
