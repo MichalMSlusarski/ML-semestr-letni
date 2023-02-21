@@ -2,7 +2,7 @@
 # Plik do wykorzystania: spam.csv
 
 import pandas as pd
-import numpy as np
+import numpy as np 
 
 from keras.models import Model, Sequential
 from keras.layers import LSTM, Dense, Embedding
