@@ -2,6 +2,7 @@
 Some of the projects from my ML classes
 
 ### **Predicting time series data with Dense Neural Networks**
-#### Principle:
+#### Design:
 #### Data preprocessing:
 #### Parameters:
+##### How changing the parameters affects the outcome?
