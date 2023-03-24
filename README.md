@@ -1,12 +1,16 @@
 # ML-projects-with-Python
 Some of the projects from my ML classes
 
+Readme **todo**:
+[omówić, którąś z sieci z zajęć]
+
 ### **Predicting time series data with Dense Neural Networks**
 #### Design:
 ##### Structure:
+
 #### Data preprocessing:
 
-We are dealing with simple time series data representing...  
+[uzupełnić] 
 
 #### Parameters:
 ##### How changing the parameters affects the outcome?
