@@ -1,4 +1,9 @@
-## Opis przykładowego projektu w Keras:
+## Zabawy z sieciami neuronowymi
+
+Choć uczenie maszynowe nie należy do najprostszych tematów, podstawowa zasada dziłania sieci neurownowych, może być zawarta w jednym zdaniu:
+*Dążymy do znalezienia **minimum funkcji kosztu**, które jest reprezentowane przez wartości wag, dla których funkcja kosztu przyjmuje najmniejszą wartość.*
+
+#### **Przykładowy, prosty model rozpoznawania pisma**
 
 Na początku importowane są potrzebne biblioteki, w tym Keras - bibliotekę do budowania sieci neuronowych, numpy - bibliotekę do operacji na macierzach, matplotlib - bibliotekę do rysowania wykresów.
 
@@ -49,17 +54,19 @@ model.add(Dense(10, activation='sigmoid', input_shape=(784,))) # pierwsza warstw
 model.add(Dense(10, activation='softmax')) # druga warstwa
 ```
 
-Tworzony jest model sieci neuronowej, składający się z dwóch warstw. Pierwsza warstwa ma 10 neuronów i używa funkcji aktywacji sigmoid - druga warstwa również ma 10 neuronów i używa funkcji aktywacji softmax. Pierwsza warstwa jest warstwą wejściową, której rozmiar jest równy liczbie pikseli obrazów cyfr.
+Tworzony jest model sieci neuronowej, składający się z dwóch warstw. Warstwy te są w pełni połączonymi warstwami neuronów, gdzie każdy neuron w warstwie jest połączony ze wszystkimi neuronami w poprzedniej warstwie. Pierwsza warstwa ma 10 neuronów i używa funkcji aktywacji sigmoid - druga warstwa również ma 10 neuronów i używa funkcji aktywacji softmax. Pierwsza warstwa jest warstwą wejściową, której rozmiar jest równy liczbie pikseli obrazów cyfr. 
+
+Funkcja sigmoid przetwarza dane wejściowe (tj. piksele obrazów cyfr) na wartości z zakresu 0-1, które interpretujemy jako prawdopodobieństwo, że dany neuron reprezentuje daną cyfrę. Funkcja softmax natomiast normalizuje wyniki funkcji sigmoid w taki sposób, że suma wszystkich wartości wynosi 1. Dzięki temu wyniki tej funkcji możemy interpretować jako rozkład prawdopodobieństwa dla wszystkich klas.
 
 Wzory funkcji:
 
 **Sigmoid** 
 
-σ(x)=1+e−x1​
+\sigma(z) = \frac{1} {1 + e^{-z}}
 
 **Softmax**
 
-σ(x)i​=∑j=1K​exj​exi​​,dlai=1,…,K
+\sigma(z_i) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2,\dots,K
 
 Ostatnim krokiem jest kompilacja i tzw. *fitowanie* modelu:
 
@@ -68,6 +75,20 @@ model.compile(loss="categorical_crossentropy", optimizer="sgd", metrics = ['accu
 model.fit(x_train, y_train, batch_size=100, epochs=5)
 ```
 
-Jako funkcja straty ustawiona została `categorical_crossentropy`, optymalizator jako `sgd` (stochastic gradient descent) i metrykę jako `accuracy`.
+Jako funkcja straty ustawiona została `categorical_crossentropy`, optymalizator jako `sgd` (stochastic gradient descent) i metrykę jako `accuracy`. Dokładne znaczenie tych terminów wyjaśniam poniżej.
+
+___
+
+**Co to jest funkcja straty?** 
+
+Najogólniej są to funkcje pozwalające porównać etykiety klas predykowanych i rzeczywistych. Przytaczana funkcja cross-entropi jest popularnym narzędziem stosowanym w problemach klasyfikacji wieloklasowej. 
+
+**Co to jest optymalizator?**
+
+Optymalizatory w sieciach neuronowych to algorytmy służące do aktualizacji wag sieci w trakcie procesu uczenia się, w celu minimalizacji funkcji kosztu. 
+
+**Co to jest metryka?**
+
+Accuracy = \frac{TP+TN}{TP+TN+FP+FN}
 
 
