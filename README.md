@@ -62,7 +62,7 @@ Wzory funkcji:
 
 **Sigmoid** 
 
-\sigma(z) = \frac{1} {1 + e^{-z}}
+$\sigma(z) = \frac{1} {1 + e^{-z}}$
 
 **Softmax**
 
