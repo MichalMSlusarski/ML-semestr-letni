@@ -58,7 +58,7 @@ Tworzony jest model sieci neuronowej, składający się z dwóch warstw. Warstwy
 
 Funkcja sigmoid przetwarza dane wejściowe (tj. piksele obrazów cyfr) na wartości z zakresu 0-1, które interpretujemy jako prawdopodobieństwo, że dany neuron reprezentuje daną cyfrę. Funkcja softmax natomiast normalizuje wyniki funkcji sigmoid w taki sposób, że suma wszystkich wartości wynosi 1. Dzięki temu wyniki tej funkcji możemy interpretować jako rozkład prawdopodobieństwa dla wszystkich klas.
 
-Wzory funkcji:
+Wzory funkcji aktywacji:
 
 **Sigmoid** 
 
@@ -67,6 +67,10 @@ $\sigma(z) = \frac{1} {1 + e^{-z}}$
 **Softmax**
 
 $\sigma(z_i) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2,\dots,K$
+
+alternatywnie, zamiast funkcji sigmoidalnej można użyć funkcji ReLU:
+
+$Relu(z) = max(0, z)$
 
 Ostatnim krokiem jest kompilacja i tzw. *fitowanie* modelu:
 
