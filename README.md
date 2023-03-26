@@ -23,7 +23,7 @@ Następnie, ładowane są dane MNIST i dzielone na zbiory treningowy i testowy. 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 ```
 
-Poniższe linie to standaryzacja danych, czyli normalizację wartości pikseli do zakresu od 0 do 1.
+Poniższe linie to standaryzacja danych, czyli normalizacja wartości pikseli do zakresu od 0 do 1. Celem normalizacji jest ułatwienie procesu uczenia modelu. Pozwala ona na szybsze zbieganie algorytmów optymalizacyjnych do minimum globalnego. Ponadto, w niektórych zbiorach danych, normalizacja jest wymagana celem zmniejszenia wpływu wartości odstających oraz umożliwienia porównywania danych różniących się skalą/jednostką/zakresem. 
 
 ```
 x_train = x_train.astype('float32') 
