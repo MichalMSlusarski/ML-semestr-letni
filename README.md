@@ -32,7 +32,7 @@ x_train /= 255
 x_test /= 255
 ```
 
-Aby móc przetwarzać dane z obrazów 28x28 pikseli przez sieć typu DNN, należy przekształcić ją na jednowymiarową macierz o długości 784 pikseli. Oraz 
+Aby móc przetwarzać dane z obrazów 28x28 pikseli przez sieć typu DNN, należy przekształcić ją na jednowymiarową macierz o długości 784 pikseli.
 
 ```
 x_train = x_train.reshape(60000, 784) 
