@@ -64,11 +64,13 @@ Wzory funkcji aktywacji:
 
 $\sigma(z) = \frac{1} {1 + e^{-z}}$
 
+gdzie $z$ to wektor wejściowy - ważona suma wejść neuronu. Funkcja ta zwraca wartość bliską 0 dla bardzo dużych wartości ujemnych $x$, a wartość bliską 1 dla bardzo dużych wartości dodatnich $x$. Dla $x$ równego zero funkcja sigmoid zwraca wartość 0,5.
+
 **Softmax**
 
 $\sigma(x_i) = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}} \quad \text{for } i=1,2,\dots,K$
 
-gdzie $\mathbf{x}$ to wektor wejściowy, a $K$ to liczba klas. Funkcja softmax normalizuje wartości wejściowe tak, że ich suma wynosi 1, co pozwala na interpretację wyników jako prawdopodobieństw przynależności do poszczególnych klas.
+gdzie $x$ to wektor wejściowy, a $K$ to liczba klas. Funkcja softmax normalizuje wartości wejściowe tak, że ich suma wynosi 1, co pozwala na interpretację wyników jako prawdopodobieństw przynależności do poszczególnych klas.
 
 Alternatywnie, zamiast funkcji sigmoidalnej można użyć funkcji ReLU, która lepiej sprawdza się przy większej liczbie warstw:
 
