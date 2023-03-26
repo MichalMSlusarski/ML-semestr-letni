@@ -95,7 +95,7 @@ Optymalizatory w sieciach neuronowych to algorytmy służące do aktualizacji wa
 
 **Co to jest metryka?**
 
-Metryki w uczeniu maszynowym to liczbowe wskaźniki służące do oceny jakości modelu uczącego się na podstawie zestawu danych. Metryki są używane do mierzenia, jak dobrze model dopasowuje się do danych treningowych oraz jak dobrze generalizuje na nowych, niewidzianych danych testowych.
+Metryki w uczeniu maszynowym to liczbowe wskaźniki służące do oceny jakości modelu uczącego się na podstawie zestawu danych. Metryki są używane do mierzenia, jak dobrze model dopasowuje się do danych treningowych oraz jak dobrze generalizuje na nowych, niewidzianych wcześniej danych testowych.
 
 Zastosowana w ewaluacji modelu metryka `accuracy` oznacza procentową liczbę poprawnie sklasyfikowanych przykładów w zbiorze testowym:
 
