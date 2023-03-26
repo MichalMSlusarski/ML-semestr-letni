@@ -68,7 +68,7 @@ $\sigma(z) = \frac{1} {1 + e^{-z}}$
 
 $\sigma(z_i) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2,\dots,K$
 
-alternatywnie, zamiast funkcji sigmoidalnej można użyć funkcji ReLU:
+alternatywnie, zamiast funkcji sigmoidalnej można użyć funkcji ReLU, która lepiej sprawdza się przy większej liczbie warstw:
 
 $Relu(z) = max(0, z)$
 
