@@ -66,7 +66,7 @@ $\sigma(z) = \frac{1} {1 + e^{-z}}$
 
 **Softmax**
 
-\sigma(z_i) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2,\dots,K
+$\sigma(z_i) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2,\dots,K$
 
 Ostatnim krokiem jest kompilacja i tzw. *fitowanie* modelu:
 
@@ -89,6 +89,10 @@ Optymalizatory w sieciach neuronowych to algorytmy służące do aktualizacji wa
 
 **Co to jest metryka?**
 
-Accuracy = \frac{TP+TN}{TP+TN+FP+FN}
+Metryki w uczeniu maszynowym to liczbowe wskaźniki służące do oceny jakości modelu uczącego się na podstawie zestawu danych. Metryki są używane do mierzenia, jak dobrze model dopasowuje się do danych treningowych oraz jak dobrze generalizuje na nowych, niewidzianych danych testowych.
+
+Zastosowana w ewaluacji modelu metryka `accuracy` oznacza procentową liczbę poprawnie sklasyfikowanych przykładów w zbiorze testowym:
+
+$Accuracy = \frac{TP+TN}{TP+TN+FP+FN}$
 
 
