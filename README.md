@@ -17,7 +17,9 @@ from keras.layers.core import Dense, Activation
 import numpy as np
 ```
 
-Następnie, ładowane są dane MNIST i dzielone na zbiory treningowy i testowy. Zbiór treningowy zawiera 60 000 obrazów cyfr, a zbiór testowy - 10 000 obrazów.
+Następnie, ładowane są dane MNIST[^1] i dzielone na zbiory treningowy i testowy. Zbiór treningowy zawiera 60 000 obrazów cyfr, a zbiór testowy - 10 000 obrazów.
+
+[^1]: MNIST to baza danych autorstwa Y. Le Cunn et al. zawierająca cyfry pisane odręcznie. Wchodzi w skład pakietu Keras.
 
 ```
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
