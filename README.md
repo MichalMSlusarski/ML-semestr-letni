@@ -66,7 +66,7 @@ $\sigma(z) = \frac{1} {1 + e^{-z}}$
 
 **Softmax**
 
-$\sigma(x) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2, \dots ,K$
+$\sigma(x) = \frac{e^{z_i}}{\sum_{j=1}^K e^{z_j}} \ \ \ for\ i=1,2, \dots ,K$
 
 gdzie $\mathbf{x}$ to wektor wejściowy, a $K$ to liczba klas. Funkcja softmax normalizuje wartości wejściowe tak, że ich suma wynosi 1, co pozwala na interpretację wyników jako prawdopodobieństw przynależności do poszczególnych klas.
 
