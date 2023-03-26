@@ -1,11 +1,11 @@
 ## Zabawy z sieciami neuronowymi
 
-Choć uczenie maszynowe nie należy do najprostszych tematów, podstawowa zasada dziłania sieci neurownowych, może być zawarta w jednym zdaniu:
+Choć uczenie maszynowe nie należy do najprostszych tematów, podstawowa zasada działania sieci neurownowych, może być zawarta w jednym zdaniu:
 *Dążymy do znalezienia **minimum funkcji kosztu**, które jest reprezentowane przez wartości wag, dla których funkcja kosztu przyjmuje najmniejszą wartość.*
 
 #### **Przykładowy, prosty model rozpoznawania pisma**
 
-Na początku importowane są potrzebne biblioteki, w tym Keras - bibliotekę do budowania sieci neuronowych, numpy - bibliotekę do operacji na macierzach, matplotlib - bibliotekę do rysowania wykresów.
+Na początku importowane są potrzebne biblioteki, w tym Keras - biblioteka do budowania sieci neuronowych, numpy - biblioteka do operacji na macierzach, matplotlib - biblioteka do rysowania wykresów.
 
 ```
 import keras 
