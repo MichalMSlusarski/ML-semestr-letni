@@ -109,4 +109,6 @@ gdzie:
 
 <img src="Confusion-Matrix-between-cluster-labels-TP-true-positive-FP-false-positive-TN-true.png" width="300" height="100"/>
 
+___
+
 Notatka autorstwa Michała Ślusarskiego, udostępnianie dozwolone na licencji CC BY-NC 4.0 International.
