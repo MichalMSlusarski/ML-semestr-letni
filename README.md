@@ -107,6 +107,6 @@ $Accuracy = \frac{TP+TN}{TP+TN+FP+FN}$
 
 gdzie: 
 
-<img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.researchgate.net%2Ffigure%2FConfusion-Matrix-between-cluster-labels-TP-true-positive-FP-false-positive-TN-true_tbl1_301515757&psig=AOvVaw2MvTsm8Kvrvap8yRqROAPV&ust=1680027162751000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCIjvwIPb_P0CFQAAAAAdAAAAABAH" />
+<img src="Confusion-Matrix-between-cluster-labels-TP-true-positive-FP-false-positive-TN-true.png" />
 
 Notatka autorstwa Michała Ślusarskiego, udostępnianie dozwolone na licencji CC BY-NC 4.0 International.
