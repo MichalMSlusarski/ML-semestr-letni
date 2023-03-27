@@ -78,6 +78,8 @@ Alternatywnie, zamiast funkcji sigmoidalnej można użyć funkcji ReLU, która l
 
 $Relu(z) = max(0, z)$
 
+funkcja zwraca wartość $z$ dla wartości pozytywnych $z$, a $0$ dla negatywnych.
+
 Ostatnim krokiem jest kompilacja i tzw. *fitowanie* modelu:
 
 ```
