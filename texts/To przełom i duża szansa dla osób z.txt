@@ -1,0 +1,7 @@
+To przełom i duża szansa dla osób z niepełnosprawnościami, które mają problemy z mową. Naukowcy z The University of Texas stworzyli model, który przy pomocy Chatu AI pozwala odczytywać ludzkie myśli.
+
+Jesteśmy w szoku, że to działa. Pracowaliśmy nad tym 15 lat – opowiadał w rozmowie z Guardianem dr Alexander Huth, który razem z Jerrym Tangiem stworzył technologię odczytywania ludzkich myśli. Jak opisali w czasopiśmie Nature Neuroscience, ich wynalazek pozwoli tłumaczyć aktywności mózgu na słowa. I zrobi to w sposób całkowicie nieinwazyjny.
+
+To prawdziwy krok naprzód – zachwycał się dr Huth. I przekonywał, że choć technologia nie wyłapie pełnych procesów myślowych, to przedstawi ich główne punkty. Dzięki temu zrozumiemy daną osobę, mimo że nic nie powie, ani nie pokaże.
+
+Praca nad tym projektem była mozolna. Ochotnicy przez 16 godzin słuchali podcastów, a dekoder dopasowywał ich myśli do języka, który dostarczał Chat AI. Następnie naukowcy opowiadali badanym historie, pobudzając ich wyobraźnię, a w tym czasie model skanował ich mózgi, generując tekst. Nie otrzymujemy dokładnych słów, ale znamy sedno przekazu – tłumaczył dr Huth. Co to dokładnie oznacza?
