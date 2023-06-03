@@ -1,6 +1,6 @@
 ## Zabawy z sieciami neuronowymi
 
-Choć uczenie maszynowe nie należy do najprostszych tematów, podstawowa zasada działania sieci neurownowych, może być zawarta w jednym zdaniu:
+Choć uczenie maszynowe nie należy do najprostszych tematów, podstawowa zasada działania sieci neuronowych, może być zawarta w jednym zdaniu:
 *Dążymy do znalezienia **minimum funkcji kosztu**, czyli takich wartości **wag**, dla których funkcja kosztu przyjmuje najmniejszą wartość.*
 
 #### **Przykładowy, prosty model rozpoznawania pisma**
