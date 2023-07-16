@@ -112,11 +112,26 @@ class NeuralNetwork():
         return output
 ```
 
+Konstruktor __init__(self) inicjalizuje wagi synaptyczne (synaptic_weights) losowymi wartościami z przedziału [-1, 1].
+
+Funkcja aktywacji sigmoidalnej sigmoid(self, x) oblicza wartość funkcji sigmoidalnej dla danej wartości x.
+
 **Wzór funkcji sigmoidalnej** 
 
 $\sigma(z) = \frac{1} {1 + e^{-z}}$
 
 gdzie $z$ to wektor wejściowy - ważona suma wejść neuronu. Funkcja ta zwraca wartość bliską 0 dla bardzo dużych wartości ujemnych $x$, a wartość bliską 1 dla bardzo dużych wartości dodatnich $x$. Dla $x$ równego zero funkcja sigmoid zwraca wartość 0,5.
+
+Pochodna funkcji sigmoidalnej sigmoid_derivative(self, x) oblicza pochodną funkcji sigmoidalnej dla danej wartości x. Pochodna ta jest używana podczas obliczania dostosowań wag w procesie treningu, wykorzystując propagację wsteczną.
+
+Metoda treningowa train(self, training_inputs, training_outputs, training_iterations) przechodzi przez określoną liczbę iteracji treningowych. Dla każdej iteracji:
+
+    Wykonuje krok "w przód" (forward pass) przez sieć, obliczając wyjście na podstawie wejść treningowych.
+    Oblicza błąd jako różnicę między oczekiwanymi wyjściami treningowymi a rzeczywistymi wyjściami sieci.
+    Oblicza dostosowania wag na podstawie iloczynu transponowanej macierzy wejść treningowych, błędu oraz pochodnej funkcji sigmoidalnej z wyjścia.
+    Aktualizuje wagi synaptyczne, dodając dostosowania.
+
+Metoda predykcji think(self, inputs) przyjmuje wejścia inputs i oblicza wyjście sieci neuronowej. Przekształca wejścia na typ float, wykonuje ważoną sumę wejść (np.dot(inputs, self.synaptic_weights)) i stosuje funkcję sigmoidalną do wyniku. Zwraca obliczone wyjście, które jest interpretowane jako prawdopodobieństwo klasy pozytywnej w przypadku klasyfikacji binarnej.
 
 ### Trenowanie modelu
 
@@ -217,7 +232,13 @@ Najprawdopodobniej, dodatkowa warstwa wprowadza niepotrzebny poziom skomplikowan
 
 #### Zmiana funkcji aktywacji
 
-Prostą funkcją aktywacji, którą można zastosować w warstwie ukrytej jest ReLU. Przyporządkowuje ona wartościom dodatnim ich wartość w sposób liniowy, a wartościom ujemnym wartość 0. Do definicji funkcji wykorzystuję metodę maximum z biblioteki numpy.
+Prostą funkcją aktywacji, którą można zastosować w warstwie ukrytej jest ReLU. Przyporządkowuje ona wartościom dodatnim ich wartość w sposób liniowy, a wartościom ujemnym wartość 0. 
+
+**Wzór funkcji ReLU**
+
+$Relu(z) = max(0, z)$
+
+Do definicji funkcji wykorzystuję metodę maximum z biblioteki numpy.
 ```python
 def relu(self, x):
     return np.maximum(0, x)
@@ -227,6 +248,7 @@ Pochodna z ReLU to pochodna z X dla liczb dodatnich i pochodna z 0 dla liczb uje
 def relu_derivative(self, x):
     return np.where(x > 0, 1, 0)
 ```
+
 Jedyną zmianą w stosunku do sieci dwuwarstwowej jest konieczność podmienienia funkcji sigmoid na ReLU we wszystkich miejscach, w których figurowała jako warstwa ukryta. Przykład poniżej:
 ```python
 hidden_output = self.sigmoid(np.dot(inputs, self.synaptic_weights1))
@@ -237,14 +259,14 @@ hidden_output = self.relu(np.dot(training_inputs, self.synaptic_weights1))
 ```
 Eksperymentując z liczbą neuronów pośrednich, przy 7 neuronach model osiągnął maksymalny wynik 64% dokładności. Lepiej, niż w przypadku dwóch warstw z aktywacją sigmoidalną, ale wciąż gorzej niż w przypadku jednowarstwowej sieci. Jak widać prostsze, nie znaczy gorsze.
 
-Finalnie, najlepszym rozwiązaniem jest pozostanie przy oryginalnej architekturze jednowarstwowej sieci.
-
 
 ## Wprowadzenie do Keras
 
-Na początku importowane są potrzebne biblioteki, w tym Keras - biblioteka do budowania sieci neuronowych, numpy - biblioteka do operacji na macierzach, matplotlib - biblioteka do rysowania wykresów.
+Keras to wysokopoziomowa biblioteka do tworzenia i trenowania sieci neuronowych. Została zaprojektowana w celu zapewnienia prostego i intuicyjnego interfejsu programistycznego dla budowy modeli sieci neuronowych. 
 
-```
+Pierwszym ćwiczeniem będzie rozpoznawanie cyfr pisanych.
+
+```python
 import keras 
 from keras.datasets import mnist 
 import matplotlib.pyplot as plt 
@@ -258,13 +280,13 @@ Następnie, ładowane są dane MNIST[^1] i dzielone na zbiory treningowy i testo
 
 [^1]: MNIST to baza danych autorstwa Y. Le Cunn et al. zawierająca cyfry pisane odręcznie. Wchodzi w skład pakietu Keras.
 
-```
+```python
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 ```
 
 Poniższe linie to standaryzacja danych, czyli normalizacja wartości pikseli do zakresu od 0 do 1. Celem normalizacji jest ułatwienie procesu uczenia modelu. Pozwala ona na szybsze zbieganie algorytmów optymalizacyjnych do minimum globalnego. Ponadto, w niektórych zbiorach danych, normalizacja jest wymagana celem zmniejszenia wpływu wartości odstających oraz umożliwienia porównywania danych różniących się skalą/jednostką/zakresem. 
 
-```
+```python
 x_train = x_train.astype('float32') 
 x_test = x_test.astype('float32') 
 x_train /= 255
@@ -273,21 +295,21 @@ x_test /= 255
 
 Aby móc przetwarzać dane z obrazów 28x28 pikseli przez sieć typu DNN, należy przekształcić ją na jednowymiarową macierz o długości 784 pikseli.
 
-```
+```python
 x_train = x_train.reshape(60000, 784) 
 x_test = x_test.reshape(10000, 784)
 ```
 
 Kolejnym krokiem jest zakodowanie wartości cyfr na wektory binarne za pomocą funkcji `to_categorical` z biblioteki Keras. Dzięki temu możliwe jest przetwarzanie wyników przez sieć neuronową.
 
-```
+```python
 y_train = to_categorical(y_train, num_classes=10) 
 y_test = to_categorical(y_test, num_classes=10)
 ```
 
 W końcu przychodzi pora na stworzenie modelu: 
 
-```
+```python
 model = Sequential() 
 model.add(Dense(10, activation='sigmoid', input_shape=(784,))) # pierwsza warstwa (wejściowa)
 model.add(Dense(10, activation='softmax')) # druga warstwa
@@ -297,51 +319,32 @@ Tworzony jest model sieci neuronowej, składający się z dwóch warstw. Warstwy
 
 Funkcja sigmoid przetwarza dane wejściowe (tj. piksele obrazów cyfr) na wartości z zakresu 0-1, które interpretujemy jako prawdopodobieństwo, że dany neuron reprezentuje daną cyfrę. Funkcja softmax natomiast normalizuje wyniki funkcji sigmoid w taki sposób, że suma wszystkich wartości wynosi 1. Dzięki temu wyniki tej funkcji możemy interpretować jako rozkład prawdopodobieństwa dla wszystkich klas.
 
-Wzory funkcji aktywacji:
-
-
-
-**Softmax**
+**Wzór funkcji softmax**
 
 $\sigma(x_i) = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}} \quad \text{for } i=1,2,\dots,K$
 
 gdzie $x$ to wektor wejściowy, a $K$ to liczba klas. Funkcja softmax normalizuje wartości wejściowe tak, że ich suma wynosi 1, co pozwala na interpretację wyników jako prawdopodobieństw przynależności do poszczególnych klas.
 
-Alternatywnie, zamiast funkcji sigmoidalnej można użyć funkcji ReLU, która lepiej sprawdza się przy większej liczbie warstw:
-
-$Relu(z) = max(0, z)$
-
-funkcja zwraca wartość $z$ dla wartości pozytywnych $z$, a $0$ dla negatywnych.
+Alternatywnie, zamiast funkcji sigmoidalnej można użyć funkcji ReLU, która lepiej sprawdza się przy większej liczbie warstw.
 
 Ostatnim krokiem jest kompilacja i tzw. *fitowanie* modelu:
 
-```
+```python
 model.compile(loss="categorical_crossentropy", optimizer="sgd", metrics = ['accuracy'])
 model.fit(x_train, y_train, batch_size=100, epochs=5)
 ```
 
-Jako funkcja straty ustawiona została `categorical_crossentropy`, optymalizator jako `sgd` (stochastic gradient descent) i metrykę jako `accuracy`. Dokładne znaczenie tych terminów wyjaśniam poniżej.
+Jako funkcja straty ustawiona została `categorical_crossentropy`(entropia krzyżowa), optymalizator jako `sgd` (stochastic gradient descent) i metrykę jako `accuracy`.
 
-___
+**Wzór funkcji entropii krzyżowej**
 
-**Co to jest funkcja straty?** 
+$L(y,ŷ)=−(y⋅log(ŷ)+(1−y)⋅log(1−ŷ))$
 
-Najogólniej są to funkcje pozwalające porównać etykiety klas predykowanych i rzeczywistych. Przytaczana funkcja cross-entropi jest popularnym narzędziem stosowanym w problemach klasyfikacji wieloklasowej. 
+*Gdzie:*
 
-**Co to jest optymalizator?**
+- *y to prawdziwa etykieta (0 lub 1)*
+- *ŷ to przewidziana etykieta przez model (wartość z zakresu 0 do 1)*
 
-Optymalizatory w sieciach neuronowych to algorytmy służące do aktualizacji wag sieci w trakcie procesu uczenia się, w celu minimalizacji funkcji kosztu. 
-
-**Co to jest metryka?**
-
-Metryki w uczeniu maszynowym to liczbowe wskaźniki służące do oceny jakości modelu uczącego się na podstawie zestawu danych. Metryki są używane do mierzenia, jak dobrze model dopasowuje się do danych treningowych oraz jak dobrze generalizuje na nowych, niewidzianych wcześniej danych testowych.
-
-Zastosowana w ewaluacji modelu metryka `accuracy` oznacza procentową liczbę poprawnie sklasyfikowanych przykładów w zbiorze testowym:
-
-$Accuracy = \frac{TP+TN}{TP+TN+FP+FN}$
-
-gdzie: 
-
-<img src="Confusion-Matrix-between-cluster-labels-TP-true-positive-FP-false-positive-TN-true.png" width="300" height="100"/>
+  
 
 ___
