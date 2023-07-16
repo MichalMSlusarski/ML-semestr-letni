@@ -345,6 +345,227 @@ $L(y,ŷ)=−(y⋅log(ŷ)+(1−y)⋅log(1−ŷ))$
 - *y to prawdziwa etykieta (0 lub 1)*
 - *ŷ to przewidziana etykieta przez model (wartość z zakresu 0 do 1)*
 
-  
+## Przetwarzanie tekstu (Word Embeddings)
+
+### Przygotowanie danych
+
+```python
+def load_doc(filename):
+    file = open(filename, 'r')
+    text = file.read()
+    file.close()
+
+    return text
+
+def clean_doc(doc):
+    tokens = doc.split()
+    re_punc = re.compile('[%s]' % re.escape(string.punctuation))
+    tokens = [re_punc.sub('', w) for w in tokens]
+    tokens = [word for word in tokens if word.isalpha()]
+    stop_words = set(stopwords.words('english'))
+    tokens = [w for w in tokens if not w in stop_words]
+    tokens = [word for word in tokens if len(word) > 1]
+
+    return tokens
+```
+
+Funkcja `load_doc` służy do wczytania zawartości pliku tekstowego o podanej nazwie. Funkcja `clean_doc` otrzymuje tekst, który dzieli na pojedyncze słowa (tokeny). Następnie usuwa znaki interpunkcyjne, słowa niebędące literami, *stopwords* oraz słowa równe bądź krótsze niż jeden znak. Zwraca listę przetworzonych tokenów.
+
+Następnym krokiem będzie **zdefiniowanie słownika** słów używanych w dokumentach, których używamy do analizy. Do tego zadania importujemy dwie dodatkowe biblioteki:
+
+```
+from keras.preprocessing.text import Tokenizer
+```
+
+Moduł `keras.preprocessing.text.Tokenizer` służy do przetwarzania tekstu na wektory numeryczne, które mogą być wykorzystane do modelowania tekstu.
+
+```python
+def add_doc_to_vocab(filename, vocab):
+    doc = load_doc(filename)
+    tokens = clean_doc(doc)
+    vocab.update(tokens)
+
+def process_docs(directory, vocab):
+    for filename in listdir(directory):
+        if filename.startswith('11'):
+            continue
+
+    path = directory + '/' + filename
+    add_doc_to_vocab(path, vocab)
+
+def save_list(lines, filename):
+    data = '\n'.join(lines)
+    file = open(filename, 'w')
+    file.write(data)
+    file.close()
+
+vocab = Counter()
+
+process_docs('/content/drive/MyDrive/Colab Notebooks/pos', vocab)
+process_docs('/content/drive/MyDrive/Colab Notebooks/neg', vocab)
+
+print(len(vocab))
+
+min_occurance = 2
+tokens = [k for k,c in vocab.items() if c >= min_occurance]
+print(len(tokens))
+
+save_list(tokens, 'vocab.txt')
+```
+
+    Funkcje te są odpowiedzialne za przygotowanie słownika wykorzystanego w modelu. Funkcja `add_doc_to_vocab` wczytuje dokument i wywołuje, opisaną wcześniej, funkcję `clean_doc`. Funkcja `process_docs` przetwarza wszystkie dokumenty w katalogu, wykorzystując funkcję `add_doc_to_vocab` do dodania słów do słownika. Natomiast funkcja `save_list` zapisuje listę słów do pliku o podanej nazwie. Na końcu kod wyświetla długość słownika oraz liczbę tokenów, które występują co najmniej dwukrotnie (są to słowa, które trafią do słownika).
+
+Tym sposobem został zdefiniowany słownik o nazwie ‘**vocab.txt**’.
+
+Teraz przystępujemy do przygotowania reprezentacji tekstów według modelu Bag-of-Words. Będziemy musieli wykonać dwa kroki:
+
+- utworzenie linii tokenów z naszych zasobów
+- zakodowanie tekstów modelem reprezentacji Bag-of-Words
+
+Na początku zaczniemy od funkcji, która utworzy nam linie tokenów:
+
+```python
+def doc_to_line(filename, vocab):
+    doc = load_doc(filename)
+    tokens = clean_doc(doc)
+    tokens = [w for w in tokens if w in vocab]
+    return ' '.join(tokens)
+```
+
+Funkcja o nazwie `doc_to_line` przyjmuje dwa argumenty - nazwę pliku oraz zbiór słów, których słownictwo ma być użyte do filtrowania tokenów. Funkcja najpierw wczytuje dokument z pliku, a następnie usuwa z niego znaki specjalne i dzieli tekst na pojedyncze tokeny. Następnie filtruje listę tokenów, aby pozostawić tylko te, które znajdują się w zbiorze słów (przekazanym jako drugi argument). Na koniec łączy listę tokenów w jeden ciąg znaków i zwraca ten ciąg.
+
+Następnym krokiem jest już zakodowanie tekstów:
+
+```python
+def process_docs(directory, vocab, is_train):
+    lines = list()
+    for filename in listdir(directory):
+        if is_train and filename.startswith('11'):
+            continue
+        if not is_train and not filename.startswith('11'):
+            continue
+        path = directory + '/' + filename
+        line = doc_to_line(path, vocab)
+        lines.append(line)
+    return lines
+
+def load_clean_dataset(vocab, is_train):
+    neg = process_docs('/content/drive/MyDrive/Colab Notebooks/neg', vocab, is_train)
+    pos = process_docs('/content/drive/MyDrive/Colab Notebooks/pos', vocab, is_train)
+    docs = neg + pos
+    labels = [0 for _ in range(len(neg))] + [1 for _ in range(len(pos))]
+    return docs, labels
+
+def create_tokenizer(lines):
+    tokenizer = Tokenizer()
+    tokenizer.fit_on_texts(lines)
+    return tokenizer
+
+vocab_filename = 'vocab.txt'
+vocab = load_doc(vocab_filename)
+vocab = set(vocab.split())
+train_docs, ytrain = load_clean_dataset(vocab, True)
+test_docs, ytest = load_clean_dataset(vocab, False)
+tokenizer = create_tokenizer(train_docs)
+Xtrain = tokenizer.texts_to_matrix(train_docs, mode='freq')
+Xtest = tokenizer.texts_to_matrix(test_docs, mode='freq')
+```
+
+Funkcje, które zostają tutaj użyte, oprócz wcześniej wspomnianej `process_docs`, to `load_clean_dataset`, która ładuje zbiór danych z dwóch folderów: "neg" i "pos" i dokonuje ich przetworzenia, używając funkcji `process_docs`, a następnie łączy je w jedną listę. Potem funkcja przygotowuje etykiety dla dokumentów - "0" dla negatywnych dokumentów i "1" dla pozytywnych dokumentów - i zwraca listę dokumentów i odpowiadających im etykiet. Następnie funkcja `create_tokenizer` tworzy obiekt Tokenizer, który służy do przetwarzania tekstu na sekwencje liczb.
+
+### Model
+
+Oczyściwszy dokumenty, rozpoczynam budowę modelu.
+
+**Budowa i trenowanie modelu**
+
+Importujemy moduł `keras`, a wraz z nim typ sekwencyjny `sequential` oraz warstwy typu `dense`, `flatten`, `embedding` i `convolutional` (konwolucyjne):
+
+```
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Flatten
+from keras.layers import Embedding
+from keras.layers.convolutional import Conv1D
+from keras.layers.convolutional import MaxPooling1D
+```
+
+Zaczytujemy dane treningowe i dokonujemy ich wektoryzacji.
+
+```python
+def load_clean_dataset(vocab, is_train):
+    neg = process_docs(r'C:\Users\mslus\Desktop\Projects\rafinacja-zaliczenie\neg', vocab, is_train)
+    pos = process_docs(r'C:\Users\mslus\Desktop\Projects\rafinacja-zaliczenie\pos', vocab, is_train)
+    docs = neg + pos
+    labels = array([0 for _ in range(len(neg))] + [1 for _ in range(len(pos))])
+    return docs, labels
+
+def create_tokenizer(lines):
+    tokenizer = Tokenizer()
+    tokenizer.fit_on_texts(lines)
+    return tokenizer
+```
+
+Kluczem do stworzenia modelu Word Embeddings jest wyrównanie długości sekwencji wejścia - *padding*. Modele Word Embeddings wymagają stałej długości sekwencji wejściowych. Dzięki *paddingowi*, można dostosować zróżnicowane długości zdaniowych sekwencji do oczekiwanej długości, co pozwala na bezproblemowe wykorzystanie tych modeli. Niestety, podczas importu modułu do paddingu z Keras wystąpił nieoczekiwany błąd zgodności wersji. Na szczęście, łatwo można stworzyć taką funkcję od podstaw - `pad_sequences`. Wywołujemy ją w funkcji `encode_docs`.
+
+```python
+def pad_sequences(sequences, maxlen=None, padding_value=0):
+    if maxlen is None:
+        maxlen = max(len(seq) for seq in sequences)
+
+    padded_sequences = []
+    for seq in sequences:
+        padded_seq = seq[:maxlen] + [padding_value] * max(0, maxlen - len(seq))
+        padded_sequences.append(padded_seq)
+    return padded_sequences
+
+def encode_docs(tokenizer, max_length, docs):
+    encoded = tokenizer.texts_to_sequences(docs)
+    padded = pad_sequences(encoded, maxlen=max_length)
+    return padded
+```
+
+Podczas treningu sieci neuronowej z wykorzystaniem warstwy `embedding`, wagi tej warstwy są aktualizowane, aby nauczyć się odpowiednich reprezentacji słów w kontekście konkretnego zadania. W trakcie propagacji wstecznej, modele aktualizują wektory osadzeń w taki sposób, aby słowa o podobnym znaczeniu lub kontekście były reprezentowane przez podobne wektory.
+
+**Definiowanie modelu**
+
+Zaczynamy od stworzenia modelu sekwencyjnego za pomocą klasy `Sequential()`. Następnie dodawana jest warstwa `Embedding`, która tworzy wektory osadzenia dla słów.`vocab_size` oznacza rozmiar słownika, czyli liczbę unikalnych słów w zbiorze danych. Argument `100` określa rozmiar wektora osadzenia dla każdego słowa. `input_length` wskazuje na maksymalną długość sekwencji wejściowej.
+
+```
+def define_model(vocab_size, max_length):
+    model = Sequential()
+    model.add(Embedding(vocab_size, 100, input_length=max_length))
+    model.add(Conv1D(filters=32, kernel_size=8, activation='relu'))
+    model.add(MaxPooling1D(pool_size=2))
+    model.add(Flatten())
+    model.add(Dense(10, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.summary()
+    return model
+```
+
+W trzecim kroku dodajemy warstwę konwolucyjną `Conv1D`. Warstwa konwolucyjna w modelu Word Embeddings pozwala na wykrycie lokalnych wzorców w tekście, takich jak sekwencje słów o określonym znaczeniu lub kontekście. Filtry konwolucyjne działają jako detektory cech, które uczą się reprezentować różne aspekty tekstu, na przykład słowa kluczowe, frazy lub gramatyczne konstrukcje. Te cechy mogą następnie być wykorzystane przez kolejne warstwy modelu do wykonania konkretnych zadań związanych z przetwarzaniem języka naturalnego.
+
+Dodawana jest warstwa `MaxPooling1D`, której zadaniem jest warstwa redukcja wymiarowości macierzy cech. Przyczynia się ona do bardziej efektywnego i skutecznego przetwarzania tekstu, poprawiając reprezentację cech, redukując wymiarowość i zwiększając odporność na zmienność.
+
+Przed wejściem do warstwy `Dense`, dane z poprzednich warstw muszą zostać spłaszczone do jednego wymiaru. Służy do tego warstwa `Flatten`. Warstwę wyjściową stanowi Dense, aktywowane funkcją *sigmoid*, która zwraca wartości z zakresu od 0 do 1, interpretowane jako prawdopodobieństwo przynależności do klasy. Kompilacja modelu odbywa się na parametrach analogicznych, do tych, które zastosowaliśmy w modelu Bag-of-Words. Jako funkcja straty wywoływana jest `binary_crossentropy`. Optymalizator `adam`, a miarą ewaluacji modelu jest `accuracy`.
+
+Na podstawie skompilowanego modelu rozpoczyna się trening, polegający na wywołaniu uprzednio zdefiniowanych funkcji.
+
+Na szybko można sprawdzić model na przykładowych zdaniach testowych:
+
+```python
+text = 'This is the best movie I have ever seen'
+percent, sentiment = predict_sentiment(text, vocab, tokenizer, max_length, model)
+print('Review: [%s]\nSentiment: %s (%.3f%%)' % (text, sentiment, percent*100))
+# test negative text
+text = 'This is the worst movie ever.'
+percent, sentiment = predict_sentiment(text, vocab, tokenizer, max_length, model)
+print('Review: [%s]\nSentiment: %s (%.3f%%)' % (text, sentiment, percent*100))
+```
+
+
+ 
 
 ___
