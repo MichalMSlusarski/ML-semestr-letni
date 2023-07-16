@@ -48,8 +48,8 @@ def save_list(lines, filename):
 
 vocab = Counter()
 
-process_docs(r'\pos', vocab) # tutaj należy zmodyfikować ścieżkę do danych treningowych
-process_docs(r'\neg', vocab)
+process_docs(r'training_data\pos', vocab) # tutaj należy zmodyfikować ścieżkę do danych treningowych
+process_docs(r'training_data\neg', vocab)
 
 print(len(vocab))
 
