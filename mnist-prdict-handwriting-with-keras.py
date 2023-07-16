@@ -43,6 +43,6 @@ print(np.shape(x_train),np.shape(x_test))
 
 plt.imshow(x_test[1], cmap=plt.cm.binary)
 
-#predictions = model.predict(x_test)
-#print(np.argmax(predictions[1]) )
-#print(predictions[1])
+predictions = model.predict(x_test)
+print(np.argmax(predictions[1]) )
+print(predictions[1])
