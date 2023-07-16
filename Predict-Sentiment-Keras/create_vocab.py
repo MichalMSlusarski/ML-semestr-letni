@@ -48,8 +48,8 @@ def save_list(lines, filename):
 
 vocab = Counter()
 
-process_docs(r'C:\Users\mslus\Desktop\Projects\rafinacja-zaliczenie\pos', vocab)
-process_docs(r'C:\Users\mslus\Desktop\Projects\rafinacja-zaliczenie\neg', vocab)
+process_docs(r'\pos', vocab) # tutaj należy zmodyfikować ścieżkę do danych treningowych
+process_docs(r'\neg', vocab)
 
 print(len(vocab))
 
