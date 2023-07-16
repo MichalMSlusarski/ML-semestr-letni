@@ -126,10 +126,10 @@ Pochodna funkcji sigmoidalnej sigmoid_derivative(self, x) oblicza pochodną funk
 
 Metoda treningowa train(self, training_inputs, training_outputs, training_iterations) przechodzi przez określoną liczbę iteracji treningowych. Dla każdej iteracji:
 
-    Wykonuje krok "w przód" (forward pass) przez sieć, obliczając wyjście na podstawie wejść treningowych.
-    Oblicza błąd jako różnicę między oczekiwanymi wyjściami treningowymi a rzeczywistymi wyjściami sieci.
-    Oblicza dostosowania wag na podstawie iloczynu transponowanej macierzy wejść treningowych, błędu oraz pochodnej funkcji sigmoidalnej z wyjścia.
-    Aktualizuje wagi synaptyczne, dodając dostosowania.
+- Wykonuje krok "w przód" (forward pass) przez sieć, obliczając wyjście na podstawie wejść treningowych.
+- Oblicza błąd jako różnicę między oczekiwanymi wyjściami treningowymi a rzeczywistymi wyjściami sieci.
+- Oblicza dostosowania wag na podstawie iloczynu transponowanej macierzy wejść treningowych, błędu oraz pochodnej funkcji sigmoidalnej z wyjścia.
+- Aktualizuje wagi synaptyczne, dodając dostosowania.
 
 Metoda predykcji think(self, inputs) przyjmuje wejścia inputs i oblicza wyjście sieci neuronowej. Przekształca wejścia na typ float, wykonuje ważoną sumę wejść (np.dot(inputs, self.synaptic_weights)) i stosuje funkcję sigmoidalną do wyniku. Zwraca obliczone wyjście, które jest interpretowane jako prawdopodobieństwo klasy pozytywnej w przypadku klasyfikacji binarnej.
 
