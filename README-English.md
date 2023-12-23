@@ -260,4 +260,3 @@ hidden_output = self.relu(np.dot(training_inputs, self.synaptic_weights1))
 Experimenting with the number of intermediate neurons, with 7 neurons, the model achieved a maximum accuracy of 64%. Better than in the case of two layers with sigmoid activation but still worse than in the case of a single-layer network. As seen, simpler doesn't mean worse.
 ```
 
-This translation retains the original structure, code snippets, and formatting while providing an accurate English version of the document.
