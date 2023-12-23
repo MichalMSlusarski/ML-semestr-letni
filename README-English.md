@@ -1,8 +1,5 @@
 # Notes and projects from my Machine Learning classes
 
-Sure, I'll translate the provided Polish Markdown document into English while retaining its structure and formatting:
-
-```markdown
 # Machine Learning (notes)
 
 While machine learning is not one of the easiest topics, the basic principle of how neural networks operate can be summed up in one sentence:
@@ -29,6 +26,7 @@ For training and modifying the network, we received a test set named basic.csv c
 I start working with the data by visually inspecting the dataset. I determined that there are two rows explaining the name and type of the presented variable. There are also numerous empty values, most likely representing missing values.
 
 To clean the dataset, I created a script called clean_data. As part of the operation, I load the uncleaned set basic.csv. I perform basic cleaning: removing explanatory rows and the Z13 column; filling in missing data with zeros and proactively standardizing the data type in the table (to_numeric).
+
 ```python
 import pandas as pd
 import numpy as np
