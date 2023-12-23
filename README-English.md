@@ -1,15 +1,13 @@
 # Notes and projects from my Machine Learning classes
 
-# Machine Learning (notes)
-
 While machine learning is not one of the easiest topics, the basic principle of how neural networks operate can be summed up in one sentence:
 *We aim to find the **minimum of the loss function**, meaning the **weights**' values for which the cost function takes the smallest value.*
 
 ### Repository Contents
 
 - Network from scratch
-- Introduction to Keras
-- Word Embeddings
+- Introduction to Keras (not yet translated)
+- Word Embeddings (not yet translated)
 
 ## Network from scratch
 
